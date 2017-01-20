@@ -1,13 +1,13 @@
 {
   "name": "react-form-factory",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "HOC / Factory approach to a React form system",
   "main": "dist/",
   "author": "Alex Howard (thezanke@gmail.com)",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/moser-inc/react-form-factory.git"
+    "type": "git",
+    "url": "https://github.com/moser-inc/react-form-factory.git"
   },
   "scripts": {
     "build": "sagui build",
