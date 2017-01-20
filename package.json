@@ -5,6 +5,10 @@
   "main": "dist/",
   "author": "Alex Howard (thezanke@gmail.com)",
   "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/moser-inc/react-form-factory.git"
+  },
   "scripts": {
     "build": "sagui build",
     "demo": "start-storybook -p 9001 -c .storybook",
