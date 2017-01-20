@@ -1,0 +1,37 @@
+{
+  "name": "react-form-factory",
+  "version": "0.1.0",
+  "description": "HOC / Factory approach to a React form system",
+  "main": "dist/",
+  "author": "Alex Howard (thezanke@gmail.com)",
+  "license": "MIT",
+  "scripts": {
+    "build": "sagui build",
+    "demo": "start-storybook -p 9001 -c .storybook",
+    "dist": "sagui dist",
+    "test": "sagui test",
+    "test:lint": "sagui test:lint",
+    "test:typecheck": "sagui test:typecheck",
+    "test:unit": "sagui test:unit --coverage",
+    "test:unit:watch": "sagui test:unit --watch"
+  },
+  "devDependencies": {
+    "@kadira/storybook": "^2.35.3",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-react-app": "^2.0.1",
+    "eslint": "^3.8.1",
+    "eslint-config-react-app": "^0.5.0",
+    "eslint-plugin-flowtype": "^2.30.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.9.0",
+    "react-json-tree": "^0.10.1",
+    "sagui": "^8.0.1"
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^1.2.0",
+    "lodash": "^4.17.4",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  }
+}
