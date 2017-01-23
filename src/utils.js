@@ -4,6 +4,9 @@ export const splitPath = (path, at = '.') => path.split(at)
 
 export const applyPathValue = (json, path, value) => {
   let current = json
+
+  if (value === undefined) return current
+
   let key = path
 
   if (path.includes('.')) {
@@ -17,6 +20,16 @@ export const applyPathValue = (json, path, value) => {
     key = keys[keys.length - 1]
   }
 
-  if (value !== undefined) current[key] = value
+  if (key.endsWith('[]')) {
+    key = key.slice(0, key.length - 2)
+
+    if (!current[key]) {
+      current[key] = [value]
+    } else {
+      current[key].push(value)
+    }
+  } else {
+    current[key] = value
+  }
   return json
 }
