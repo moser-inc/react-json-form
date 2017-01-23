@@ -8,16 +8,5 @@ module.exports = {
       main: 'index',
       umdName: 'reactFormFactory'
     }
-  ],
-  webpack: {
-    module: {
-      preLoaders: [
-        {
-          test: /\.(jsx?|es6)$/,
-          loader: 'eslint-loader',
-          exclude: /node_modules/
-        }
-      ]
-    }
-  }
+  ]
 }
