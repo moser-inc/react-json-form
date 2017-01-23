@@ -15,24 +15,31 @@ export const createInput = WrappedComponent => {
       onChange: PropTypes.func,
     }
 
-    state = {}
-    isRegistered = false
+    state = {
+      isRegistered: false,
+      value: undefined,
+    }
 
     componentDidMount() {
       if (this.context.registerInput && this.props.path) {
         this.context.registerInput(this.props.path, this.getValue)
-        this.isRegistered = true
 
-        if (this.props.value || this.props.defaultValue) {
-          this.setState({
-            value: this.props.value ? this.props.value : this.props.defaultValue,
-          })
+        const updates = { isRegistered: true }
+
+        if (this.props.value) {
+          updates.value = this.props.value
+        } else if (this.props.defaultValue) {
+          updates.value = this.props.defaultValue
         }
+
+        this.setState(updates)
       }
     }
 
     componentDidUpdate(prevProps) {
-      if (this.props.value !== prevProps.value) this.setState({ value: this.props.value })
+      if (this.state.isRegistered && this.props.value !== prevProps.value) {
+        this.setState({ value: this.props.value })
+      }
     }
 
     getValue = () => this.state.value
@@ -50,7 +57,7 @@ export const createInput = WrappedComponent => {
       return (
         <WrappedComponent
           {...omit(this.props, ['path', 'onChange'])}
-          onChange={this.isRegistered ? this.onChange : this.props.onChange}
+          onChange={this.state.isRegistered ? this.onChange : this.props.onChange}
         />
       )
     }
