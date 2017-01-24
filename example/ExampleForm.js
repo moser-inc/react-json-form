@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
-import { createForm, createInput } from '../src'
+import { BasicForm as Form, createInput } from '../src'
 import JSONTree from 'react-json-tree'
 
-const Input = createInput(props => <input type="text" {...props} />)
+const Input = createInput()(props => <input type="text" {...props} />)
+const Checkbox = createInput({ toggleable: true })(props => <input type="checkbox" {...props} />)
 
 const UserFields = () => (
   <section>
     <h3>User</h3>
     <div>Name: <Input path="user.name" /></div>
     <div>Email: <Input path="user.email" /></div>
+    <h4>Likes:</h4>
+    <div><Checkbox path="user.likes[]" value="pizza" /> Pizza</div>
+    <div><Checkbox path="user.likes[]" value="computers" /> Computers</div>
+    <div><Checkbox path="user.likes[]" value="trump" /> Trump</div>
   </section>
 )
 
@@ -22,21 +27,24 @@ const CompanyFields = () => (
   </section>
 )
 
-class ExampleForm extends Component {
+export default class ExampleForm extends Component {
   state = { data: {} }
 
-  updateData = () => this.setState({ data: this.props.getJson() })
+  updateData = data => this.setState({ data })
 
   render () {
     return (
-      <form>
+      <Form onSubmit={this.updateData}>
         <UserFields />
         <CompanyFields />
-        <button type="button" onClick={this.updateData}>Submit</button>
-        <JSONTree data={this.state.data} />
-      </form>
+
+        <button type="submit">Submit</button>
+
+        <JSONTree
+          data={this.state.data}
+          shouldExpandNode={() => true}
+        />
+      </Form>
     )
   }
 }
-
-export default createForm(ExampleForm)

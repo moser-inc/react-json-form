@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import omit from 'lodash/omit'
 
-import { getDisplayName, applyPathValue } from './utils'
+import { getDisplayName, applyPathState } from './utils'
 
 export const createForm = WrappedComponent => {
   class FormHoc extends Component {
@@ -18,13 +18,17 @@ export const createForm = WrappedComponent => {
       return { registerInput: this.registerInput }
     }
 
-    registerInput = (path, getValue) => {
-      this.inputs.push([path, getValue])
+    registerInput = (path, getState) => {
+      this.inputs.push([path, getState])
     }
 
     getJson = () => {
       // TODO: return the values of all registered inputs
-      const reducer = (json, [path, getValue]) => applyPathValue(json, path, getValue())
+      const reducer = (json, [path, getState]) => {
+        const { value, checked, toggleable } = getState()
+        if (toggleable && !checked) return json
+        return applyPathState(json, path, value)
+      }
       return this.inputs.reduce(reducer, {})
     }
 

@@ -4,7 +4,7 @@ import omit from 'lodash/omit'
 
 import { getDisplayName } from './utils'
 
-export const createInput = WrappedComponent => {
+export const createInput = ({ toggleable } = {}) => WrappedComponent => {
   class InputHoc extends Component {
     static displayName = `InputHoc(${getDisplayName(WrappedComponent)})`
     static contextTypes = { registerInput: PropTypes.func }
@@ -16,15 +16,17 @@ export const createInput = WrappedComponent => {
     }
 
     state = {
-      isRegistered: false,
+      registered: false,
+      toggleable: undefined,
       value: undefined,
+      checked: undefined,
     }
 
     componentDidMount() {
       if (this.context.registerInput && this.props.path) {
-        this.context.registerInput(this.props.path, this.getValue)
+        this.context.registerInput(this.props.path, this.getState)
 
-        const updates = { isRegistered: true }
+        const updates = { registered: true, toggleable }
 
         if (this.props.value) {
           updates.value = this.props.value
@@ -32,32 +34,43 @@ export const createInput = WrappedComponent => {
           updates.value = this.props.defaultValue
         }
 
+        if (toggleable) {
+          if (this.props.checked !== undefined) {
+            updates.checked = this.props.checked
+          } else if (this.props.defaultChecked !== undefined) {
+            updates.checked = this.props.defaultChecked
+          }
+        }
+
         this.setState(updates)
       }
     }
 
     componentDidUpdate(prevProps) {
-      if (this.state.isRegistered && this.props.value !== prevProps.value) {
-        this.setState({ value: this.props.value })
+      if (this.state.registered) {
+        if (this.props.value !== prevProps.value) this.setState({ value: this.props.value })
+        if (toggleable && this.props.checked !== prevProps.checked) this.setState({ checked: this.props.checked })
       }
     }
 
-    getValue = () => this.state.value
+    getState = () => this.state
 
     onChange = (...args) => {
       if (this.props.onChange) this.props.onChange(...args)
 
       const [e] = args
-      const value = (e.target && e.target.value) ? e.target.value : e
 
-      this.setState({ value })
+      const updates = { value: (e.target && e.target.value) ? e.target.value : e }
+      if (toggleable && e.target) updates.checked = e.target.checked
+
+      this.setState(updates)
     }
 
     render() {
       return (
         <WrappedComponent
           {...omit(this.props, ['path', 'onChange'])}
-          onChange={this.state.isRegistered ? this.onChange : this.props.onChange}
+          onChange={this.state.registered ? this.onChange : this.props.onChange}
         />
       )
     }
