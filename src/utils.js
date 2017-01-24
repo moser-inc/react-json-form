@@ -3,10 +3,9 @@ export const getDisplayName = Component => Component.displayName || Component.na
 export const splitPath = (path, at = '.') => path.split(at)
 
 export const applyPathValue = (json, path, value) => {
+  if (value === undefined) return json
+
   let current = json
-
-  if (value === undefined) return current
-
   let key = path
 
   if (path.includes('.')) {
@@ -22,14 +21,11 @@ export const applyPathValue = (json, path, value) => {
 
   if (key.endsWith('[]')) {
     key = key.slice(0, key.length - 2)
-
-    if (!current[key]) {
-      current[key] = [value]
-    } else {
-      current[key].push(value)
-    }
+    if (!current[key]) current[key] = [value]
+    current[key].push(value)
   } else {
     current[key] = value
   }
+
   return json
 }
