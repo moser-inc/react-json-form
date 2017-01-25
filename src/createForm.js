@@ -14,10 +14,6 @@ export const createForm = WrappedComponent => {
 
     inputs = []
 
-    getChildContext() {
-      return { registerInput: this.registerInput }
-    }
-
     registerInput = (path, getState) => {
       this.inputs.push([path, getState])
     }
@@ -37,11 +33,17 @@ export const createForm = WrappedComponent => {
       this.props.onSubmit(this.getJson())
     }
 
-    getChildProps = () => ({
-      ...omit(this.props, ['onSubmit']),
-      getJson: this.getJson,
-      onSubmit: this.props.onSubmit ? this.onSubmit : undefined,
-    })
+    getChildContext() {
+      return { registerInput: this.registerInput }
+    }
+
+    getChildProps() {
+      return {
+        ...omit(this.props, ['onSubmit']),
+        getJson: this.getJson,
+        onSubmit: this.props.onSubmit ? this.onSubmit : undefined,
+      }
+    }
 
     render() {
       return <WrappedComponent {...this.getChildProps()} />
