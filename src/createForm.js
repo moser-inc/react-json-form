@@ -37,14 +37,14 @@ export const createForm = WrappedComponent => {
       this.props.onSubmit(this.getJson())
     }
 
-    childProps = {
+    getChildProps = () => ({
       ...omit(this.props, ['onSubmit']),
       getJson: this.getJson,
       onSubmit: this.props.onSubmit ? this.onSubmit : undefined,
-    }
+    })
 
     render() {
-      return <WrappedComponent {...this.childProps} />
+      return <WrappedComponent {...this.getChildProps()} />
     }
   }
 

@@ -72,13 +72,13 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
       this.setState(updates)
     }
 
-    childProps = {
+    getChildProps = () => ({
       ...omit(this.props, ['path', 'onChange']),
       onChange: this.state.registered ? this.onChange : this.props.onChange,
-    }
+    })
 
     render() {
-      return <WrappedComponent {...this.childProps} />
+      return <WrappedComponent {...this.getChildProps()} />
     }
   }
 
