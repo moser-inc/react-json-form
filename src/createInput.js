@@ -7,7 +7,12 @@ import { getDisplayName } from './utils'
 export const createInput = ({ toggleable } = {}) => WrappedComponent => {
   class InputHoc extends Component {
     static displayName = `InputHoc(${getDisplayName(WrappedComponent)})`
-    static contextTypes = { registerInput: PropTypes.func }
+
+    static contextTypes = {
+      nestedPath: PropTypes.string,
+      registerInput: PropTypes.func,
+    }
+
     static propTypes = {
       defaultValue: PropTypes.any,
       value: PropTypes.any,
@@ -24,7 +29,8 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
 
     componentDidMount() {
       if (this.context.registerInput && this.props.path) {
-        this.context.registerInput(this.props.path, this.getState)
+        const path = this.context.nestedPath ? `${this.context.nestedPath}.${this.props.path}` : this.props.path
+        this.context.registerInput(path, this.getState)
 
         const updates = { registered: true, toggleable }
 
@@ -60,19 +66,19 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
 
       const [e] = args
 
-      const updates = { value: (e.target && e.target.value) ? e.target.value : e }
+      const updates = { value: (e && e.target && e.target.value) ? e.target.value : e }
       if (toggleable && e.target) updates.checked = e.target.checked
 
       this.setState(updates)
     }
 
+    childProps = {
+      ...omit(this.props, ['path', 'onChange']),
+      onChange: this.state.registered ? this.onChange : this.props.onChange,
+    }
+
     render() {
-      return (
-        <WrappedComponent
-          {...omit(this.props, ['path', 'onChange'])}
-          onChange={this.state.registered ? this.onChange : this.props.onChange}
-        />
-      )
+      return <WrappedComponent {...this.childProps} />
     }
   }
 

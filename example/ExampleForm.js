@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BasicForm as Form, createInput } from '../src'
+import { BasicForm as Form, Nest, createInput } from '../src'
 import JSONTree from 'react-json-tree'
 
 const Input = createInput()(props => <input type="text" {...props} />)
@@ -8,22 +8,22 @@ const Checkbox = createInput({ toggleable: true })(props => <input type="checkbo
 const UserFields = () => (
   <section>
     <h3>User</h3>
-    <div>Name: <Input path="user.name" /></div>
-    <div>Email: <Input path="user.email" /></div>
+    <div>Name: <Input path="name" /></div>
+    <div>Email: <Input path="email" /></div>
     <h4>Likes:</h4>
-    <div><Checkbox path="user.likes[]" value="pizza" /> Pizza</div>
-    <div><Checkbox path="user.likes[]" value="computers" /> Computers</div>
-    <div><Checkbox path="user.likes[]" value="trump" /> Trump</div>
+    <div><Checkbox path="likes[]" value="pizza" /> Pizza</div>
+    <div><Checkbox path="likes[]" value="computers" /> Computers</div>
+    <div><Checkbox path="likes[]" value="trump" /> Trump</div>
   </section>
 )
 
 const CompanyFields = () => (
   <section>
     <h3>Company</h3>
-    <div>Name: <Input path="company.name" /></div>
-    <div>Address: <Input path="company.address" /></div>
-    <div>Phone: <Input path="company.phone" /></div>
-    <div>Website: <Input path="company.website" /></div>
+    <div>Name: <Input path="name" /></div>
+    <div>Address: <Input path="address" /></div>
+    <div>Phone: <Input path="phone" /></div>
+    <div>Website: <Input path="website" /></div>
   </section>
 )
 
@@ -35,8 +35,12 @@ export default class ExampleForm extends Component {
   render () {
     return (
       <Form onSubmit={this.updateData}>
-        <UserFields />
-        <CompanyFields />
+        <Nest path="user">
+          <UserFields />
+        </Nest>
+        <Nest path="company">
+          <CompanyFields />
+        </Nest>
 
         <button type="submit">Submit</button>
 
