@@ -25,8 +25,9 @@ const Input = createInput(props => <input {...props} />)
 
 render(
   <Form onSubmit={json => console.log(json)}>
-    Name: <Input type="text" path="name" />
-    Age: <Input type="number" path="age" />
+    Name: <Input type="text" path="name" /><br />
+    Age: <Input type="number" path="age" /><br />
+    <button type="submit">Show me the JSON</button>
   </Form>,
   document.getElementById('root')
 )
