@@ -1,13 +1,13 @@
 {
-  "name": "react-form-factory",
-  "version": "1.1.2",
-  "description": "HOC / Factory approach to a React form system",
+  "name": "react-json-form",
+  "version": "1.1.3",
+  "description": "React Form HOC which produces JSON output",
   "main": "dist/",
   "author": "Alex Howard (thezanke@gmail.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/moser-inc/react-form-factory.git"
+    "url": "https://github.com/moser-inc/react-json-form.git"
   },
   "scripts": {
     "build": "sagui build",
