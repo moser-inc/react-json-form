@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import omit from 'lodash/omit'
+import { List } from 'immutable'
 
 import { getDisplayName, applyPathState } from './utils'
 
@@ -12,10 +13,18 @@ export const createForm = WrappedComponent => {
       onSubmit: PropTypes.func,
     }
 
-    inputs = []
+    inputs = List()
 
     registerInput = (path, getState) => {
-      this.inputs.push([path, getState])
+      const input = [path, getState]
+
+      this.inputs = this.inputs.push(input)
+
+      return () => {
+        const i = this.inputs.indexOf(input)
+        if (i === -1) return
+        this.inputs = this.inputs.delete(i)
+      }
     }
 
     getJson = () => {
