@@ -30,7 +30,7 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
     componentDidMount() {
       if (this.context.registerInput && this.props.path) {
         const path = this.context.nestedPath ? `${this.context.nestedPath}.${this.props.path}` : this.props.path
-        this.deregisterInput = this.context.registerInput(path, this.getState)
+        this.deregister = this.context.registerInput(path, this.getState)
 
         const updates = { registered: true, toggleable }
 
@@ -53,7 +53,7 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
     }
 
     componentWillUnmount() {
-      this.deregisterInput();
+      if (this.deregister) this.deregister();
     }
 
     componentDidUpdate(prevProps) {
