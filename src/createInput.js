@@ -11,6 +11,7 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
     static contextTypes = {
       nestedPath: PropTypes.string,
       registerInput: PropTypes.func,
+      uncheckPath: PropTypes.func,
     }
 
     static propTypes = {
@@ -29,8 +30,8 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
 
     componentDidMount() {
       if (this.context.registerInput && this.props.path) {
-        const path = this.context.nestedPath ? `${this.context.nestedPath}.${this.props.path}` : this.props.path
-        this.deregister = this.context.registerInput(path, this.getState)
+        this.path = this.context.nestedPath ? `${this.context.nestedPath}.${this.props.path}` : this.props.path
+        this.deregister = this.context.registerInput(this.path, this.getState, this.uncheck)
 
         const updates = { registered: true, toggleable }
 
@@ -53,17 +54,21 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
     }
 
     componentWillUnmount() {
-      if (this.deregister) this.deregister();
+      if (this.deregister) this.deregister()
     }
 
     componentDidUpdate(prevProps) {
       if (this.state.registered) {
         if (this.props.value !== prevProps.value) this.setState({ value: this.props.value })
-        if (toggleable && this.props.checked !== prevProps.checked) this.setState({ checked: this.props.checked })
+        if (toggleable && this.props.checked !== prevProps.checked) {
+          if (!this.path.endsWith('[]')) this.context.uncheckPath(this.path)
+          this.setState({ checked: this.props.checked })
+        }
       }
     }
 
     getState = () => this.state
+    uncheck = () => this.setState({ checked: false })
 
     onChange = (...args) => {
       if (this.props.onChange) this.props.onChange(...args)
@@ -71,16 +76,23 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
       const [e] = args
 
       const updates = { value: (e && e.target && e.target.value) ? e.target.value : e }
-      if (toggleable && e.target) updates.checked = e.target.checked
+      if (toggleable && e.target) {
+        if (!this.path.endsWith('[]')) this.context.uncheckPath(this.path)
+        updates.checked = e.target.checked
+      }
 
       this.setState(updates)
     }
 
     getChildProps() {
-      return {
+      const props = {
         ...omit(this.props, ['path', 'onChange']),
         onChange: this.state.registered ? this.onChange : this.props.onChange,
       }
+
+      if (toggleable) props.checked = this.state.checked || false
+
+      return props
     }
 
     render() {

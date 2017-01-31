@@ -3,7 +3,14 @@ import { BasicForm as Form, Nest, createInput } from '../src'
 import JSONTree from 'react-json-tree'
 
 const Input = createInput()(props => <input type="text" {...props} />)
-const Checkbox = createInput({ toggleable: true })(props => <input type="checkbox" {...props} />)
+
+const Checkbox = createInput({ toggleable: true })(
+  ({ children, ...props }) => <label><input type="checkbox" {...props} /> {children}</label>
+)
+
+const Radio = createInput({ toggleable: true })(
+  ({ children, ...props }) => <label><input type="radio" {...props} /> {children}</label>
+)
 
 const UserFields = () => (
   <section>
@@ -11,9 +18,9 @@ const UserFields = () => (
     <div>Name: <Input path="name" /></div>
     <div>Email: <Input path="email" /></div>
     <h4>Likes:</h4>
-    <div><Checkbox path="likes[]" value="pizza" /> Pizza</div>
-    <div><Checkbox path="likes[]" value="computers" /> Computers</div>
-    <div><Checkbox path="likes[]" value="trump" /> Trump</div>
+    <div><Checkbox path="likes[]" value="pizza">Pizza</Checkbox></div>
+    <div><Checkbox path="likes[]" value="computers">Computers</Checkbox></div>
+    <div><Checkbox path="likes[]" value="kittens">Kittens</Checkbox></div>
   </section>
 )
 
@@ -41,6 +48,11 @@ export default class ExampleForm extends Component {
         <Nest path="company">
           <CompanyFields />
         </Nest>
+        <section>
+          <h4>Type</h4>
+          <div><Radio path="type" value="personal">Personal</Radio></div>
+          <div><Radio path="type" value="corporate">Corporate</Radio></div>
+        </section>
 
         <button type="submit">Submit</button>
 

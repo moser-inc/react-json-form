@@ -8,15 +8,20 @@ import { getDisplayName, applyPathState } from './utils'
 export const createForm = WrappedComponent => {
   class FormHoc extends Component {
     static displayName = `FormHoc(${getDisplayName(WrappedComponent)})`
-    static childContextTypes = { registerInput: PropTypes.func.isRequired }
+
+    static childContextTypes = {
+      registerInput: PropTypes.func.isRequired,
+      uncheckPath: PropTypes.func.isRequired,
+    }
+
     static propTypes = {
       onSubmit: PropTypes.func,
     }
 
     inputs = List()
 
-    registerInput = (path, getState) => {
-      const input = [path, getState]
+    registerInput = (path, getState, uncheck) => {
+      const input = [path, getState, uncheck]
 
       this.inputs = this.inputs.push(input)
 
@@ -26,6 +31,8 @@ export const createForm = WrappedComponent => {
         this.inputs = this.inputs.delete(i)
       }
     }
+
+    uncheckPath = path => this.inputs.filter(input => input[0] === path).forEach(([,,uncheck]) => uncheck())
 
     getJson = () => {
       // TODO: return the values of all registered inputs
@@ -43,7 +50,10 @@ export const createForm = WrappedComponent => {
     }
 
     getChildContext() {
-      return { registerInput: this.registerInput }
+      return {
+        registerInput: this.registerInput,
+        uncheckPath: this.uncheckPath,
+      }
     }
 
     getChildProps() {
