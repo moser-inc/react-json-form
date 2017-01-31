@@ -75,7 +75,7 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
 
       const [e] = args
 
-      const updates = { value: (e && e.target && e.target.value) ? e.target.value : e }
+      const updates = { value: (e && e.target) ? e.target.value : e }
       if (toggleable && e.target) {
         if (!this.path.endsWith('[]')) this.context.uncheckPath(this.path)
         updates.checked = e.target.checked
