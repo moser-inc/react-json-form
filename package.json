@@ -10,15 +10,11 @@
     "url": "https://github.com/moser-inc/react-json-form.git"
   },
   "scripts": {
-    "build": "sagui build",
     "demo": "start-storybook -p 9001 -c .storybook",
-    "dist": "sagui dist",
+    "build": "sagui dist",
     "start": "sagui develop --port 3000",
-    "test": "jest",
-    "test:lint": "sagui test:lint",
-    "test:typecheck": "sagui test:typecheck",
-    "test:unit": "sagui test:unit --coverage",
-    "test:unit:watch": "sagui test:unit --watch"
+    "test": "jest && eslint src",
+    "lint": "eslint src"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
