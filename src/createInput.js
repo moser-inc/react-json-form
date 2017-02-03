@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import omit from 'lodash/omit'
+import pick from 'lodash/pick'
 
 import { getDisplayName } from './utils'
 
-export const createInput = ({ toggleable } = {}) => WrappedComponent => {
+export const createInput = ({ toggleable, controlled } = {}) => WrappedComponent => {
   class InputHoc extends Component {
     static displayName = `InputHoc(${getDisplayName(WrappedComponent)})`
 
@@ -23,9 +24,8 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
 
     state = {
       registered: false,
-      toggleable: undefined,
       value: undefined,
-      checked: undefined,
+      checked: false,
     }
 
     componentDidMount() {
@@ -84,13 +84,23 @@ export const createInput = ({ toggleable } = {}) => WrappedComponent => {
       this.setState(updates)
     }
 
-    getChildProps() {
-      const props = {
-        ...omit(this.props, ['path', 'onChange', 'defaultChecked']),
-        onChange: this.state.registered ? this.onChange : this.props.onChange,
-      }
+    omittedProps = () => {
+      const omittedProps = ['path', 'onChange', 'defaultChecked']
+      return controlled ? [...omittedProps, 'defaultValue', 'value'] : omittedProps
+    }
 
-      if (toggleable) props.checked = this.state.checked || false
+    pickedState = ['value', 'checked']
+
+    getChildProps() {
+      const onChange = this.state.registered ? this.onChange : this.props.onChange
+
+      let props = { ...omit(this.props, this.omittedProps()), onChange }
+
+      if (controlled) {
+        props = { ...props, ...pick(this.state, this.pickedState) }
+      } else if (toggleable) {
+        props.checked = this.state.checked
+      }
 
       return props
     }
