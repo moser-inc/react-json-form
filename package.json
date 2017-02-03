@@ -10,18 +10,22 @@
     "url": "https://github.com/moser-inc/react-json-form.git"
   },
   "scripts": {
-    "demo": "start-storybook -p 9001 -c .storybook",
     "build": "sagui dist",
+    "demo": "start-storybook -p 9001 -c .storybook",
+    "dist": "sagui dist",
+    "lint": "eslint src",
     "start": "sagui develop --port 3000",
     "test": "jest && eslint src",
-    "lint": "eslint src"
+    "test:lint": "sagui test:lint",
+    "test:typecheck": "sagui test:typecheck",
+    "test:unit": "sagui test:unit --coverage",
+    "test:unit:watch": "sagui test:unit --watch"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
     "babel-eslint": "^7.1.1",
-    "babel-preset-react-app": "^2.0.1",
     "babel-jest": "^18.0.0",
-    "jest": "^18.1.0",
+    "babel-preset-react-app": "^2.0.1",
     "enzyme": "^2.7.1",
     "eslint": "^3.14.0",
     "eslint-config-react-app": "^0.5.0",
@@ -30,10 +34,11 @@
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.9.0",
     "expect": "^1.20.2",
+    "jest": "^18.1.0",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-test-renderer": "^15.4.2",
     "react-json-tree": "^0.10.1",
+    "react-test-renderer": "^15.4.2",
     "sagui": "^8.0.2"
   },
   "dependencies": {
