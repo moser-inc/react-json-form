@@ -61,10 +61,10 @@ describe('<BasicForm />', () => {
   })
 
   it('should return json', () => {
-    let formValue;
-    const onSubmit = data => formValue = data;
+    let formValue
+    const onSubmit = data => formValue = data
     const wrapper = mount(<TestForm onSubmit={onSubmit} />)
     wrapper.find('[type="submit"]').get(0).click()
     expect(formValue).toEqual({})
-  });
+  })
 })
