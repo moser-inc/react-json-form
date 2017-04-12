@@ -1,4 +1,4 @@
-# react-json-form
+# react-json-form [![Build Status](https://travis-ci.org/moser-inc/react-json-form.svg?branch=master)](https://travis-ci.org/moser-inc/react-json-form)
 
 `react-json-form` is an attempt at simplifying the creation of forms that output nested JSON objects.
 
