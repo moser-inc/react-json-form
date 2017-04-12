@@ -11,10 +11,10 @@ export const applyPathState = (json, path, value) => {
   if (path.includes('.')) {
     const keys = splitPath(path)
 
-    for (key of keys.slice(0, keys.length - 1)) {
+    keys.slice(0, keys.length - 1).forEach((key) => {
       if (!current[key]) current[key] = {}
       current = current[key]
-    }
+    });
 
     key = keys[keys.length - 1]
   }

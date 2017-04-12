@@ -1,16 +1,17 @@
-import React, { Component } from 'react'
-import { BasicForm as Form, Nest, createInput } from '../src'
-import JSONTree from 'react-json-tree'
+import React, { Component } from 'react';
+import JSONTree from 'react-json-tree';
 
-const Input = createInput()(props => <input type="text" {...props} />)
+import { BasicForm as Form, Nest, createInput } from '../src';
 
-const Checkbox = createInput({ toggleable: true })(
-  ({ children, ...props }) => <label><input type="checkbox" {...props} /> {children}</label>
-)
+const Input = createInput()(props => <input type="text" {...props} />);
 
-const Radio = createInput({ toggleable: true })(
-  ({ children, ...props }) => <label><input type="radio" {...props} /> {children}</label>
-)
+const Checkbox = createInput({ toggleable: true })(({ children, ...props }) => (
+  <label><input type="checkbox" {...props} /> {children}</label>
+));
+
+const Radio = createInput({ toggleable: true })(({ children, ...props }) => (
+  <label><input type="radio" {...props} /> {children}</label>
+));
 
 const UserFields = () => (
   <section>
@@ -22,7 +23,7 @@ const UserFields = () => (
     <div><Checkbox path="likes[]" value="computers">Computers</Checkbox></div>
     <div><Checkbox path="likes[]" value="kittens">Kittens</Checkbox></div>
   </section>
-)
+);
 
 const CompanyFields = () => (
   <section>
@@ -32,14 +33,14 @@ const CompanyFields = () => (
     <div>Phone: <Input path="phone" /></div>
     <div>Website: <Input path="website" /></div>
   </section>
-)
+);
 
 export default class ExampleForm extends Component {
-  state = { data: {} }
+  state = { data: {} };
 
-  updateData = data => this.setState({ data })
+  updateData = data => this.setState({ data });
 
-  render () {
+  render() {
     return (
       <Form onSubmit={this.updateData}>
         <Nest path="user">
@@ -56,11 +57,8 @@ export default class ExampleForm extends Component {
 
         <button type="submit">Submit</button>
 
-        <JSONTree
-          data={this.state.data}
-          shouldExpandNode={() => true}
-        />
+        <JSONTree data={this.state.data} shouldExpandNode={() => true} />
       </Form>
-    )
+    );
   }
 }
